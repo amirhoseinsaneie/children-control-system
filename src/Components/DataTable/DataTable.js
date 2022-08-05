@@ -10,7 +10,7 @@ import axios from "axios";
 import React, { Component } from "react";
 import Highlighter from "react-highlight-words";
 import "./DataTable.css";
-const URL = "https://pazel.pythonanywhere.com/api2";
+const URL = "https://bracketacademy.ir/api/api2";
 class DataTable extends Component {
   constructor(props) {
     super(props);
@@ -37,19 +37,30 @@ class DataTable extends Component {
     }
   }
   fetchData = () => {
+    this.setState({loading : true})
     axios.get(URL + "/kids").then((res) => {
+      this.setState({ loading : false })
       if (JSON.stringify(this.state.data) !== JSON.stringify(res.data)) {
-        this.setState({ data: res.data, fetched: true });
+        this.setState({ data: res.data, fetched: true});
       }
+      
     })
     .catch((err) => {
-      this.setState({  error: {
+      this.setState({loading:false,  error: {
         message: "خطا در دریافت اطلاعات",
         description: "اطلاعات به درستی دریافت نشدند، لطفا دوباره تلاش کنید.",
       } })
     });;
   };
-
+  updateKidsList = ()=>{
+    this.setState({loading : true})
+    axios.get(URL + "/porsline").then(()=>{
+      this.fetchData();
+    })
+    .catch((err)=>{
+      this.setState({loading : false , error : {message : err.message , description : ''}})
+    })
+  }
   entryHandler = (record, index) => {
     if (
       this.state.data[index].number.trim() === "000" ||
@@ -94,7 +105,8 @@ class DataTable extends Component {
         this.fetchData();
       })
       .catch((err) => {
-        this.setState({ loading: false , error : {message : err.message , description : ''} })
+       
+        this.setState({ loading: false , error : {message : err.message ? err.message : 'خطا' , description : ''} })
       });
   };
 
@@ -468,11 +480,11 @@ class DataTable extends Component {
         />
         <div onClick={this.fetchData} className="Reload">
           <ReloadOutlined />
-          <span>بروزرسانی اطلاعات</span>
+          <span>بروزرسانی وضعیت کودکان</span>
         </div>
-        <div onClick={this.fetchData} className="Refresh">
+        <div onClick={this.updateKidsList} className="Refresh">
           <ReloadOutlined />
-          <span>بروزرسانی کودک جدید</span>
+          <span>بروزرسانی لیست کودکان</span>
         </div>
         {this.state.error ? (
           <div className="error-container">
