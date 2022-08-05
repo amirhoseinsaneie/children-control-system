@@ -17,6 +17,10 @@
 .DataTable .ant-table-column-sorters {
     flex-direction: row-reverse;
 }
+.ant-alert-message {
+    margin-right: 0.5rem;
+
+}
 .Reload {
     position: absolute;
     left: 1.5rem;
@@ -28,10 +32,29 @@
     background-color: rgba(245, 245, 245, 0.5);
     padding: 0.5rem 1rem;
     cursor: pointer;
+    border-radius: 2px;
+    border: 1px solid #d9d9d9;
+    transition: all 0.3s ease;
 }
 .Reload:hover {
     background-color: whitesmoke;
 }
 .Reload span {
     margin-top: 0.5rem;
+}
+.error-container {
+    position: fixed;
+    bottom: 2rem;
+    right: 0;
+    width: 100vw;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.error-container .ant-alert {
+    width: 50rem;
+}
+.ant-pagination-item-link {
+    transform: scale(-1);
 }

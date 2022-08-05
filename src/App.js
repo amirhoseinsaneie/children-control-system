@@ -2,17 +2,28 @@ import "./App.css";
 import MenPanel from "./Containers/MenPanel/MenPanel";
 import {
   PlusCircleFilled,
- 
+  UpOutlined
 } from "@ant-design/icons";
-import { Layout, Menu, Result, Button } from "antd";
+import { Layout, Menu, Result, Button, BackTop } from "antd";
 import "antd/dist/antd.css";
 import React from "react";
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route, Link,useLocation } from "react-router-dom";
 import WomenPanel from "./Containers/WomenPanel/WomenPanel";
 import NewKid from "./Containers/NewKid/NewKid";
 const { Sider, Content } = Layout;
 function App() {
- 
+  const navigator = useLocation();
+  const defaultSelector = ()=>{
+    if (navigator.pathname === '/WomenPanel') {
+      return '3'
+    }
+    else if (navigator.pathname === '/NewKid') {
+      return '1'
+    }
+    else {
+      return '2'
+    }
+  }
   return (
     <Layout>
       <Sider
@@ -24,7 +35,7 @@ function App() {
         <Menu
           theme="dark"
           mode="inline"
-          defaultSelectedKeys={["2"]}
+          defaultSelectedKeys={defaultSelector()}
           items={[
             {
               key: "1",
@@ -79,6 +90,7 @@ function App() {
               }
             />
           </Routes>
+          <BackTop className="back-to-top"><UpOutlined /></BackTop>
         </Content>
       </Layout>
     </Layout>

@@ -3,11 +3,11 @@ import {
   CheckCircleOutlined,
   ExclamationCircleOutlined,
   SyncOutlined,
-  ReloadOutlined
+  ReloadOutlined,
 } from "@ant-design/icons";
-import { Button,  Input, Space, Table, Tag } from "antd";
+import { Alert, Button, Input, Select, Space, Table, Tag } from "antd";
 import axios from "axios";
-import React, { Component} from "react";
+import React, { Component } from "react";
 import Highlighter from "react-highlight-words";
 import "./DataTable.css";
 const URL = "https://pazel.pythonanywhere.com/api2";
@@ -22,44 +22,61 @@ class DataTable extends Component {
     searchedColumn: "",
     fetched: false,
     loading: false,
+    error: null,
 
   };
   componentDidMount() {
     this.fetchData();
   }
+  componentDidUpdate() {
+    if (this.state.error) {
+      setTimeout(()=>{this.setState({error : null})} , 5000)
+    }
+  }
   fetchData = () => {
-    axios
-      .get(URL + "/kids")
-      .then((res) => {
-        if (JSON.stringify(this.state.data) !== JSON.stringify(res.data)) {
-          this.setState({ data: res.data, fetched: true });
-        }
-      })
-      .then(() => {
-        setTimeout(() => {
-          this.fetchData();
-        }, 30000);
-      })
-      .catch(() => {
-        setTimeout(() => {
-          this.fetchData();
-        }, 30000);
-      });
+    axios.get(URL + "/kids").then((res) => {
+      if (JSON.stringify(this.state.data) !== JSON.stringify(res.data)) {
+        this.setState({ data: res.data, fetched: true });
+      }
+    })
+    .catch((err) => {
+      this.setState({  error: {
+        message: "خطا در دریافت اطلاعات",
+        description: "اطلاعات به درستی دریافت نشدند، لطفا دوباره تلاش کنید.",
+      } })
+    });;
   };
 
   entryHandler = (record, index) => {
-    this.setState({ loading: true });
-    console.log('from post ' , this.state.data[index].number)
-    axios
-      .post(URL + this.props.entryURL, { id: record.id, number: this.state.data[index].number })
-      .then((res) => {
-        const dataArray = this.state.data;
-        dataArray[index].status = "IN";
-        this.setState({ data: dataArray, loading: false });
-      })
-      .catch(() => {
-        this.setState({ loading: false });
+    if (
+      this.state.data[index].number === "000" ||
+      this.state.data[index].gender === "NO"
+    ) {
+      this.setState({
+        error: {
+          message: "اطلاعات ناقص است",
+          description: "جنسیت یا شماره وارد نشده است.",
+        },
       });
+    } else {
+      this.setState({ loading: true });
+      console.log("from post ", this.state.data[index].number);
+      axios
+        .post(URL + this.props.entryURL, {
+          id: record.id,
+          number: this.state.data[index].number,
+          gender: this.state.data[index].gender,
+        })
+        .then((res) => {
+          const dataArray = this.state.data;
+          dataArray[index].status = "IN";
+          this.setState({ data: dataArray, loading: false , error : null });
+          this.fetchData();
+        })
+        .catch((err) => {
+          this.setState({ loading: false , error : {message : err.message , description : ''} });
+        });
+    }
   };
   deliverHandler = (record, index) => {
     this.setState({ loading: true });
@@ -68,10 +85,11 @@ class DataTable extends Component {
       .then((res) => {
         const dataArray = this.state.data;
         dataArray[index].status = "RE";
-        this.setState({ data: dataArray, loading: false });
+        this.setState({ data: dataArray, loading: false, error : null });
+        this.fetchData();
       })
-      .catch(() => {
-        this.setState({ loading: false });
+      .catch((err) => {
+        this.setState({ loading: false , error : {message : err.message , description : ''} })
       });
   };
 
@@ -186,7 +204,7 @@ class DataTable extends Component {
         dataIndex: "first_name",
         key: "first_name",
         align: "right",
-        width : '10%',
+        width: "10%",
         ...this.getColumnSearchProps("first_name"),
       },
       {
@@ -194,7 +212,7 @@ class DataTable extends Component {
         dataIndex: "last_name",
         key: "last_name",
         align: "right",
-        width : '10%',
+        width: "10%",
         ...this.getColumnSearchProps("last_name"),
       },
       {
@@ -202,7 +220,7 @@ class DataTable extends Component {
         dataIndex: "gender",
         key: "gender",
         align: "right",
-        width : '10%',
+        width: "10%",
         filters: [
           {
             text: "دختر",
@@ -221,12 +239,30 @@ class DataTable extends Component {
         sorter: (a, b) => a.gender.localeCompare(b.gender),
 
         render: (text, record, index) => {
-          if (text === "MA") {
-            return <Tag color="geekblue">پسر</Tag>;
-          } else if (text === "FE") {
-            return <Tag color="magenta">دختر</Tag>;
+          if (record.status !== "NO") {
+            if (text === "MA") {
+              return <Tag color="geekblue">پسر</Tag>;
+            } else if (text === "FE") {
+              return <Tag color="magenta">دختر</Tag>;
+            }
           } else {
-            return <Tag>نامشخص</Tag>;
+            return (
+              <Select
+                style={{
+                  width: "100%",
+                }}
+                defaultValue = {record.gender === "NO" ? '' : record.gender}
+                onChange={(value) => {
+                  const dataArray = this.state.data;
+                  dataArray[index].gender = value ? value.toString() : "";
+                  this.setState({ data: dataArray });
+                  console.log(this.state.data[index].gender);
+                }}
+              >
+                <Select.Option value="FE">دختر</Select.Option>
+                <Select.Option value="MA">پسر</Select.Option>
+              </Select>
+            );
           }
         },
       },
@@ -237,22 +273,21 @@ class DataTable extends Component {
         ...this.getColumnSearchProps("number"),
         sorter: (a, b) => a.number - b.number,
         render: (text, record, index) => {
-          
           if (record.status === "NO") {
             return (
               <Input
                 onChange={(event) => {
-                  if(this.timeout) clearTimeout(this.timeout);
+                  if (this.timeout) clearTimeout(this.timeout);
                   this.timeout = setTimeout(() => {
                     const dataArray = this.state.data;
-                    dataArray[index].number = event.target.value ? event.target.value.toString() : '0';
-                    this.setState({ data: dataArray});
-                    console.log(this.state.data[index].number)
-                  }, 300);
-                  
-
+                    dataArray[index].number = event.target.value
+                      ? event.target.value.toString()
+                      : "0";
+                    this.setState({ data: dataArray });
+                    console.log(this.state.data[index].number);
+                  }, 500);
                 }}
-                defaultValue={record.number}
+                defaultValue={record.number === "000" ? '' : record.number}
               />
             );
           } else {
@@ -279,7 +314,7 @@ class DataTable extends Component {
         dataIndex: "caretaker_phone_number",
         key: "caretaker_phone_number",
         align: "right",
-        width : '10%',
+        width: "10%",
         ...this.getColumnSearchProps("caretaker_phone_number"),
         render: (text, record) =>
           text === "ندارد" ? (
@@ -293,7 +328,7 @@ class DataTable extends Component {
         dataIndex: "emergancy_calls",
         key: "emergancy_calls",
         align: "right",
-        width : '10%',
+        width: "10%",
         ...this.getColumnSearchProps("emergancy_calls"),
         render: (text, record) =>
           text === "ندارد" ? (
@@ -320,7 +355,7 @@ class DataTable extends Component {
         dataIndex: "status",
         key: "status",
         align: "right",
-        width : '10%',
+        width: "10%",
         filters: [
           {
             text: "ورود",
@@ -339,10 +374,9 @@ class DataTable extends Component {
             value: "SE",
           },
           {
-            text: "تحویل داده شد" ,
+            text: "تحویل داده شد",
             value: "DE",
           },
-          
         ],
         onFilter: (value, record) => record.status.indexOf(value) === 0,
         render: (text, record, index) => {
@@ -395,20 +429,32 @@ class DataTable extends Component {
         },
       },
     ];
-
+    
     return (
       <div className="DataTable">
         <Table
           loading={this.state.loading || !this.state.fetched}
           columns={columns}
           dataSource={this.state.data}
-          pagination={false}
-          rowKey = { (record)=>record.id}
+          pagination={{showTitle : false}}
+          rowKey={(record) => record.id}
         />
         <div onClick={this.fetchData} className="Reload">
-        <ReloadOutlined />
-        <span>بازیابی اطلاعات</span>
+          <ReloadOutlined />
+          <span>بازیابی اطلاعات</span>
         </div>
+        {this.state.error ? (
+          <div className="error-container">
+            <Alert
+              message={this.state.error.message}
+              description={this.state.error.description}
+              type="error"
+              showIcon
+              closable
+              onClose={()=>{this.setState({error : null})}}
+            />
+          </div>
+        ) : null}
       </div>
     );
   }
