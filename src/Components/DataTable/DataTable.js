@@ -30,7 +30,10 @@ class DataTable extends Component {
   }
   componentDidUpdate() {
     if (this.state.error) {
-      setTimeout(()=>{this.setState({error : null})} , 5000)
+      const timeout = setTimeout(()=>{
+        this.setState({error : null})
+        clearTimeout(timeout);
+      } , 5000)
     }
   }
   fetchData = () => {
@@ -49,8 +52,10 @@ class DataTable extends Component {
 
   entryHandler = (record, index) => {
     if (
-      this.state.data[index].number === "000" ||
-      this.state.data[index].gender === "NO"
+      this.state.data[index].number.trim() === "000" ||
+      this.state.data[index].gender.trim() === "NO" ||
+      this.state.data[index].number.trim() === "" ||
+      this.state.data[index].gender.trim() === "" 
     ) {
       this.setState({
         error: {
@@ -60,7 +65,7 @@ class DataTable extends Component {
       });
     } else {
       this.setState({ loading: true });
-      console.log("from post ", this.state.data[index].number);
+      console.log("from post ", this.state.data[index].number , this.state.data[index].gender);
       axios
         .post(URL + this.props.entryURL, {
           id: record.id,
@@ -270,6 +275,7 @@ class DataTable extends Component {
         title: "شماره",
         dataIndex: "number",
         align: "right",
+        width : '10%',
         ...this.getColumnSearchProps("number"),
         sorter: (a, b) => a.number - b.number,
         render: (text, record, index) => {
@@ -294,6 +300,27 @@ class DataTable extends Component {
             return <span>{text.toPersianDigit()}</span>;
           }
         },
+      },
+      {
+        title: "WC",
+        dataIndex: "wc",
+        key: "wc",
+        align: "right",
+        width: "5%",
+        filters: [
+          {
+            text: "بله",
+            value: true,
+          },
+          {
+            text: "خیر",
+            value: false,
+          },
+          
+          
+        ],
+        onFilter: (value, record) => record.wc === value,
+        render : (text , record , index)=> <span>{record.wc === true ? 'بله' : 'خیر'}</span>,
       },
       {
         title: "نسبت تحویل دهنده",
@@ -441,7 +468,11 @@ class DataTable extends Component {
         />
         <div onClick={this.fetchData} className="Reload">
           <ReloadOutlined />
-          <span>بازیابی اطلاعات</span>
+          <span>بروزرسانی اطلاعات</span>
+        </div>
+        <div onClick={this.fetchData} className="Refresh">
+          <ReloadOutlined />
+          <span>بروزرسانی کودک جدید</span>
         </div>
         {this.state.error ? (
           <div className="error-container">

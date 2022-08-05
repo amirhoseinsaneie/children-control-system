@@ -21,7 +21,7 @@
     margin-right: 0.5rem;
 
 }
-.Reload {
+.Reload , .Refresh {
     position: absolute;
     left: 1.5rem;
     top: 1.5rem;
@@ -36,11 +36,14 @@
     border: 1px solid #d9d9d9;
     transition: all 0.3s ease;
 }
-.Reload:hover {
+.Reload:hover , .Refresh:hover{
     background-color: whitesmoke;
 }
-.Reload span {
+.Reload span , .Refresh span {
     margin-top: 0.5rem;
+}
+.Refresh {
+    left: 10.5rem;
 }
 .error-container {
     position: fixed;
