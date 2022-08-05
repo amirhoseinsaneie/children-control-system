@@ -7,17 +7,18 @@ import {
 import { Layout, Menu, Result, Button, BackTop } from "antd";
 import "antd/dist/antd.css";
 import React from "react";
-import { Routes, Route, Link,useLocation } from "react-router-dom";
+import { Routes, Route, Link,useLocation, useNavigate } from "react-router-dom";
 import WomenPanel from "./Containers/WomenPanel/WomenPanel";
 import NewKid from "./Containers/NewKid/NewKid";
 const { Sider, Content } = Layout;
 function App() {
-  const navigator = useLocation();
+  const location = useLocation();
+  const navigate = useNavigate();
   const defaultSelector = ()=>{
-    if (navigator.pathname === '/WomenPanel') {
+    if (location.pathname === '/WomenPanel') {
       return '3'
     }
-    else if (navigator.pathname === '/NewKid') {
+    else if (location.pathname === '/NewKid') {
       return '1'
     }
     else {
@@ -39,12 +40,10 @@ function App() {
           items={[
             {
               key: "1",
-              icon: (
-                <Link to="/NewKid">
-                  <PlusCircleFilled />
-                </Link>
-              ),
+              icon: <PlusCircleFilled />
+              ,
               label: "کودک جدید",
+              onClick : ()=>{navigate('/NewKid')}
             },
             {
               key: "2",
@@ -52,6 +51,8 @@ function App() {
                 <Link to="/">MA</Link>
               ),
               label: "پذیرش پدران",
+              onClick : ()=>{navigate('/')}
+
             },
             {
               key: "3",
@@ -59,7 +60,9 @@ function App() {
                 <Link to="/WomenPanel">FE</Link>
               ),
               label: "پذیرش مادران",
+              onClick : ()=>{navigate('/WomenPanel')}
             },
+
           ]}
         />
       </Sider>
