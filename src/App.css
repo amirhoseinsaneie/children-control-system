@@ -26,3 +26,10 @@
   right: 50%;
   bottom: 2rem;
 }
+.man-icon svg {
+  margin-top: 0.65rem;
+}
+.woman-icon svg {
+  margin-top: 0.75rem;
+  transform: scale(1.25);
+}

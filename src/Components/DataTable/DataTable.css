@@ -4,9 +4,9 @@
 .DataTable .ant-tag {
     direction: ltr;
     width: 100%;
-    display: block;
     padding: 0.25rem;
     text-align: center;
+    margin: 0;
 }
 .ant-dropdown-menu-title-content {
     flex: none !important;
@@ -60,4 +60,27 @@
 }
 .ant-pagination-item-link {
     transform: scale(-1);
+}
+.DataTable .ant-table-filter-trigger {
+    margin-left: 0;
+    margin-right: 0.25rem;
+}
+.button-group {
+    display: flex;
+    flex-direction: row-reverse;
+}
+.button-group .edit-button {
+    margin-right: 0.5rem;
+}
+.ant-modal-close {
+    right: unset !important;
+    left: 0;
+}
+.ant-modal-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+.ant-modal-footer .ant-btn {
+    margin: 0 0.25rem;
 }

@@ -5,7 +5,7 @@ import {
   SyncOutlined,
   ReloadOutlined,
 } from "@ant-design/icons";
-import { Alert, Button, Input, Select, Space, Table, Tag } from "antd";
+import { Alert, Button, Input, Modal, Select, Space, Table, Tag } from "antd";
 import axios from "axios";
 import React, { Component } from "react";
 import Highlighter from "react-highlight-words";
@@ -23,60 +23,56 @@ class DataTable extends Component {
     fetched: false,
     loading: false,
     error: null,
-
+    modal: null,
   };
   componentDidMount() {
     this.fetchData();
   }
   componentDidUpdate() {
     if (this.state.error) {
-      const timeout = setTimeout(()=>{
-        this.setState({error : null})
+      const timeout = setTimeout(() => {
+        this.setState({ error: null });
         clearTimeout(timeout);
-      } , 5000)
+      }, 5000);
     }
   }
   fetchData = () => {
-    this.setState({loading : true})
-    axios.get(URL + "/kids").then((res) => {
-      this.setState({ loading : false })
-      if (JSON.stringify(this.state.data) !== JSON.stringify(res.data)) {
-        this.setState({ data: res.data, fetched: true});
-      }
-      
-    })
-    .catch((err) => {
-      this.setState({loading:false,  error: {
-        message: "خطا در دریافت اطلاعات",
-        description: "اطلاعات به درستی دریافت نشدند، لطفا دوباره تلاش کنید.",
-      } })
-    });;
-  };
-  updateKidsList = ()=>{
-    this.setState({loading : true})
-    axios.get(URL + "/porsline").then(()=>{
-      this.fetchData();
-    })
-    .catch((err)=>{
-      this.setState({loading : false , error : {message : err.message , description : ''}})
-    })
-  }
-  entryHandler = (record, index) => {
-    if (
-      this.state.data[index].number.trim() === "000" ||
-      this.state.data[index].gender.trim() === "NO" ||
-      this.state.data[index].number.trim() === "" ||
-      this.state.data[index].gender.trim() === "" 
-    ) {
-      this.setState({
-        error: {
-          message: "اطلاعات ناقص است",
-          description: "جنسیت یا شماره وارد نشده است.",
-        },
+    this.setState({ loading: true });
+    axios
+      .get(URL + "/kids")
+      .then((res) => {
+        this.setState({ loading: false });
+        if (JSON.stringify(this.state.data) !== JSON.stringify(res.data)) {
+          this.setState({ data: res.data, fetched: true });
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          loading: false,
+          error: {
+            message: "خطا در دریافت اطلاعات",
+            description:
+              "اطلاعات به درستی دریافت نشدند، لطفا دوباره تلاش کنید.",
+          },
+        });
       });
-    } else {
-      this.setState({ loading: true });
-      console.log("from post ", this.state.data[index].number , this.state.data[index].gender);
+  };
+  updateKidsList = () => {
+    this.setState({ loading: true });
+    axios
+      .get(URL + "/porsline")
+      .then(() => {
+        this.fetchData();
+      })
+      .catch((err) => {
+        this.setState({
+          loading: false,
+          error: { message: err.message, description: "" },
+        });
+      });
+  };
+  entryHandler = (record, index) => {
+    const postData = () => {
       axios
         .post(URL + this.props.entryURL, {
           id: record.id,
@@ -86,12 +82,60 @@ class DataTable extends Component {
         .then((res) => {
           const dataArray = this.state.data;
           dataArray[index].status = "IN";
-          this.setState({ data: dataArray, loading: false , error : null });
+          this.setState({ data: dataArray, loading: false, error: null });
           this.fetchData();
         })
         .catch((err) => {
-          this.setState({ loading: false , error : {message : err.message , description : ''} });
+          this.setState({
+            loading: false,
+            error: { message: err.message, description: "" },
+          });
         });
+    };
+
+    if (
+      this.state.data[index].number.trim() === "000" ||
+      this.state.data[index].gender.trim() === "NO" ||
+      this.state.data[index].number.trim() === "" ||
+      this.state.data[index].gender.trim() === ""
+    ) {
+      this.setState({
+        error: {
+          message: "اطلاعات ناقص است",
+          description: "جنسیت یا شماره وارد نشده است.",
+        },
+      });
+    } else {
+      
+      let isUnique = true;
+      for (let i = 0; i < this.state.data.length; i++) {
+        const element = this.state.data[i];
+        if (element.number === this.state.data[index].number && i !== index) {
+          isUnique = false;
+          break;
+        }
+      }
+      if (isUnique) {
+        this.setState({ loading: true });
+        postData();
+      } else {
+        this.setState({
+          modal: {
+            title: "فرد دیگر با همین شماره وجود دارد.",
+            onOk: () => {
+              postData();
+              this.setState({ modal: null , loading : true });
+            },
+            message: "آیا می‌خواهید این فرد را با شماره تکراری ثبت کنید؟",
+            
+          },
+        });
+      }
+      console.log(
+        "from post ",
+        this.state.data[index].number,
+        this.state.data[index].gender
+      );
     }
   };
   deliverHandler = (record, index) => {
@@ -101,12 +145,17 @@ class DataTable extends Component {
       .then((res) => {
         const dataArray = this.state.data;
         dataArray[index].status = "RE";
-        this.setState({ data: dataArray, loading: false, error : null });
+        this.setState({ data: dataArray, loading: false, error: null });
         this.fetchData();
       })
       .catch((err) => {
-       
-        this.setState({ loading: false , error : {message : err.message ? err.message : 'خطا' , description : ''} })
+        this.setState({
+          loading: false,
+          error: {
+            message: err.message ? err.message : "خطا",
+            description: "",
+          },
+        });
       });
   };
 
@@ -135,10 +184,12 @@ class DataTable extends Component {
       >
         <Input
           ref={this.searchInput}
-          placeholder={`جستوجو ${dataIndex}`}
+          placeholder={`جستجو ${dataIndex}`}
           value={selectedKeys[0]}
           onChange={(e) =>
-            setSelectedKeys(e.target.value ? [e.target.value.toEnglishDigit()] : [])
+            setSelectedKeys(
+              e.target.value ? [e.target.value.toEnglishDigit()] : []
+            )
           }
           onPressEnter={() =>
             this.handleSearch(selectedKeys, confirm, dataIndex)
@@ -193,7 +244,11 @@ class DataTable extends Component {
       />
     ),
     onFilter: (value, record) =>
-      record[dataIndex].toString().toEnglishDigit().toLowerCase().includes(value.toLowerCase()),
+      record[dataIndex]
+        .toString()
+        .toEnglishDigit()
+        .toLowerCase()
+        .includes(value.toLowerCase()),
     onFilterDropdownVisibleChange: (visible) => {
       if (visible) {
         setTimeout(() => this.searchInput.current?.select(), 100);
@@ -221,7 +276,7 @@ class DataTable extends Component {
         dataIndex: "first_name",
         key: "first_name",
         align: "right",
-        width: "10%",
+        width: "7%",
         ...this.getColumnSearchProps("first_name"),
       },
       {
@@ -229,7 +284,7 @@ class DataTable extends Component {
         dataIndex: "last_name",
         key: "last_name",
         align: "right",
-        width: "10%",
+        width: "9%",
         ...this.getColumnSearchProps("last_name"),
       },
       {
@@ -237,7 +292,7 @@ class DataTable extends Component {
         dataIndex: "gender",
         key: "gender",
         align: "right",
-        width: "10%",
+        width: "8%",
         filters: [
           {
             text: "دختر",
@@ -268,7 +323,11 @@ class DataTable extends Component {
                 style={{
                   width: "100%",
                 }}
-                defaultValue = {record.gender === "NO" ? '' : record.gender}
+                value={
+                  this.state.data[index].gender === "NO"
+                    ? ""
+                    : this.state.data[index].gender
+                }
                 onChange={(value) => {
                   const dataArray = this.state.data;
                   dataArray[index].gender = value ? value.toString() : "";
@@ -287,25 +346,27 @@ class DataTable extends Component {
         title: "شماره",
         dataIndex: "number",
         align: "right",
-        width : '10%',
+        width: "8%",
         ...this.getColumnSearchProps("number"),
-        sorter: (a, b) => +a.number.toEnglishDigit() - +b.number.toEnglishDigit(),
+        sorter: (a, b) =>
+          +a.number.toEnglishDigit() - +b.number.toEnglishDigit(),
         render: (text, record, index) => {
           if (record.status === "NO") {
             return (
               <Input
                 onChange={(event) => {
-                  if (this.timeout) clearTimeout(this.timeout);
-                  this.timeout = setTimeout(() => {
-                    const dataArray = this.state.data;
-                    dataArray[index].number = event.target.value
-                      ? event.target.value.toString().toEnglishDigit()
-                      : "0";
-                    this.setState({ data: dataArray });
-                    console.log(this.state.data[index].number);
-                  }, 500);
+                  const dataArray = this.state.data;
+                  dataArray[index].number = event.target.value
+                    ? event.target.value.toString().toEnglishDigit()
+                    : "0";
+                  this.setState({ data: dataArray });
+                  console.log(this.state.data[index].number);
                 }}
-                defaultValue={record.number === "000" ? '' : record.number}
+                value={
+                  this.state.data[index].number === "000"
+                    ? ""
+                    : this.state.data[index].number
+                }
               />
             );
           } else {
@@ -328,18 +389,18 @@ class DataTable extends Component {
             text: "خیر",
             value: false,
           },
-          
-          
         ],
         onFilter: (value, record) => record.wc === value,
-        render : (text , record , index)=> <span>{record.wc === true ? 'بله' : 'خیر'}</span>,
+        render: (text, record, index) => (
+          <span>{record.wc === true ? "بله" : "خیر"}</span>
+        ),
       },
+
       {
         title: "نسبت تحویل دهنده",
         dataIndex: "caretaker",
         key: "caretaker",
         align: "right",
-        ...this.getColumnSearchProps("caretaker"),
       },
       {
         title: "نام تحویل دهنده",
@@ -353,8 +414,8 @@ class DataTable extends Component {
         dataIndex: "caretaker_phone_number",
         key: "caretaker_phone_number",
         align: "right",
-        width: "10%",
-        ...this.getColumnSearchProps("caretaker_phone_number"),
+        width: "6%",
+
         render: (text, record) =>
           text === "ندارد" ? (
             <span>{text}</span>
@@ -367,8 +428,8 @@ class DataTable extends Component {
         dataIndex: "emergancy_calls",
         key: "emergancy_calls",
         align: "right",
-        width: "10%",
-        ...this.getColumnSearchProps("emergancy_calls"),
+        width: "8%",
+
         render: (text, record) =>
           text === "ندارد" ? (
             <span>{text}</span>
@@ -381,7 +442,7 @@ class DataTable extends Component {
         dataIndex: "caretaker_home_number",
         key: "caretaker_home_number",
         align: "right",
-        ...this.getColumnSearchProps("caretaker_home_number"),
+
         render: (text, record) =>
           text === "ندارد" ? (
             <span>{text}</span>
@@ -390,11 +451,79 @@ class DataTable extends Component {
           ),
       },
       {
+        title: "ورود",
+        dataIndex: "gate_in",
+        key: "gate_in",
+        align: "right",
+        width: "6%",
+        filters: [
+          {
+            text: "پدران",
+            value: "MA",
+          },
+          {
+            text: "مادران",
+            value: "FE",
+          },
+          {
+            text: "نامشخص",
+            value: "NO",
+          },
+        ],
+        onFilter: (value, record) => record.gate_in.indexOf(value) === 0,
+        render: (text, record, index) => {
+          switch (record.gate_in) {
+            case "NO":
+              return <Tag>نامشخص</Tag>;
+            case "FE":
+              return <Tag color="pink">مادران</Tag>;
+            case "MA":
+              return <Tag color="blue">پدران</Tag>;
+            default:
+              break;
+          }
+        },
+      },
+      {
+        title: "خروج",
+        dataIndex: "gate_out",
+        key: "gate_out",
+        align: "right",
+        width: "6%",
+        filters: [
+          {
+            text: "پدران",
+            value: "MA",
+          },
+          {
+            text: "مادران",
+            value: "FE",
+          },
+          {
+            text: "نامشخص",
+            value: "NO",
+          },
+        ],
+        onFilter: (value, record) => record.gate_out.indexOf(value) === 0,
+        render: (text, record, index) => {
+          switch (record.gate_out) {
+            case "NO":
+              return <Tag>نامشخص</Tag>;
+            case "FE":
+              return <Tag color="pink">مادران</Tag>;
+            case "MA":
+              return <Tag color="blue">پدران</Tag>;
+            default:
+              break;
+          }
+        },
+      },
+      {
         title: "عملیات",
         dataIndex: "status",
         key: "status",
         align: "right",
-        width: "10%",
+        width: "8%",
         filters: [
           {
             text: "ورود",
@@ -467,15 +596,82 @@ class DataTable extends Component {
           }
         },
       },
+      {
+        title: "بازگشت",
+        align: "center",
+        render: (text, record, index) => {
+          return (
+            <Button
+              disabled={record.status === "NO"}
+              className="edit-button"
+              onClick={() => {
+                this.setState({ loading: true });
+                const dataArray = this.state.data;
+                let NewStatus = "";
+                let NewGateIN = null;
+                let NewGateOut = null;
+
+                switch (record.status) {
+                  case "IN":
+                    NewStatus = "NO";
+                    NewGateIN = "NO";
+                    break;
+                  case "RE":
+                    NewStatus = "IN";
+                    NewGateOut = "NO";
+                    break;
+                  case "SE":
+                    NewStatus = "IN";
+                    NewGateOut = "NO";
+
+                    break;
+                  case "DE":
+                    NewStatus = "IN";
+                    NewGateOut = "NO";
+
+                    break;
+                  default:
+                    break;
+                }
+                dataArray[index].status = NewStatus;
+                dataArray[index].gate_in = NewGateIN
+                  ? NewGateIN
+                  : dataArray[index].gate_in;
+                dataArray[index].gate_out = NewGateOut
+                  ? NewGateOut
+                  : dataArray[index].gate_out;
+                axios
+                  .post(URL + "/undo", { id: record.id, status: NewStatus })
+                  .then(() => {
+                    this.setState({ data: dataArray, loading: false });
+                    record.status = NewStatus;
+                    record.gate_in = NewGateIN ? NewGateIN : record.gate_in;
+                    record.gate_out = NewGateOut ? NewGateOut : record.gate_out;
+                  })
+                  .catch((err) => {
+                    this.setState({
+                      loading: false,
+                      error: { message: err.message, description: "" },
+                    });
+                  });
+              }}
+              block
+              type="link"
+            >
+              بازگشت
+            </Button>
+          );
+        },
+      },
     ];
-    
+
     return (
       <div className="DataTable">
         <Table
           loading={this.state.loading || !this.state.fetched}
           columns={columns}
           dataSource={this.state.data}
-          pagination={{showTitle : false}}
+          pagination={{ showTitle: false }}
           rowKey={(record) => record.id}
         />
         <div onClick={this.fetchData} className="Reload">
@@ -486,6 +682,17 @@ class DataTable extends Component {
           <ReloadOutlined />
           <span>بروزرسانی لیست کودکان</span>
         </div>
+        <Modal
+          visible={this.state.modal ? true : false}
+          title={this.state.modal ? this.state.modal.title : ''}
+          onOk={this.state.modal ? this.state.modal.onOk : null}
+          onCancel={()=>{this.setState({ modal: null })}}
+          cancelText="خیر"
+          okText="بله"
+          
+        >
+          <p>{this.state.modal ? this.state.modal.message : ''}</p>
+        </Modal>
         {this.state.error ? (
           <div className="error-container">
             <Alert
@@ -494,7 +701,9 @@ class DataTable extends Component {
               type="error"
               showIcon
               closable
-              onClose={()=>{this.setState({error : null})}}
+              onClose={() => {
+                this.setState({ error: null });
+              }}
             />
           </div>
         ) : null}
