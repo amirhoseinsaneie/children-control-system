@@ -9,7 +9,7 @@ import {
 
 import { Layout, Menu, Result, Button, BackTop } from "antd";
 import "antd/dist/antd.css";
-import React from "react";
+import React, { useState } from "react";
 import { Routes, Route, Link,useLocation, useNavigate } from "react-router-dom";
 import WomenPanel from "./Containers/WomenPanel/WomenPanel";
 import NewKid from "./Containers/NewKid/NewKid";
@@ -18,6 +18,7 @@ import NewKid from "./Containers/NewKid/NewKid";
 
 const { Sider, Content } = Layout;
 function App() {
+  const [collapsed , setCollapsed] = useState(true);
   const location = useLocation();
   const navigate = useNavigate();
   const defaultSelector = ()=>{
@@ -36,7 +37,8 @@ function App() {
       <Sider
         
         collapsible
-        
+        collapsed={collapsed}
+        onCollapse={()=>{setCollapsed(!collapsed)}}
       >
         <div className="logo">پنل پذیرش</div>
         <Menu
