@@ -112,7 +112,7 @@ class DataTable extends Component {
 
   handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
-    this.setState({ searchText: selectedKeys[0] });
+    this.setState({ searchText: selectedKeys[0].toEnglishDigit() });
     this.setState({ searchedColumn: dataIndex });
   };
 
@@ -135,10 +135,10 @@ class DataTable extends Component {
       >
         <Input
           ref={this.searchInput}
-          placeholder={`Search ${dataIndex}`}
+          placeholder={`جستوجو ${dataIndex}`}
           value={selectedKeys[0]}
           onChange={(e) =>
-            setSelectedKeys(e.target.value ? [e.target.value] : [])
+            setSelectedKeys(e.target.value ? [e.target.value.toEnglishDigit()] : [])
           }
           onPressEnter={() =>
             this.handleSearch(selectedKeys, confirm, dataIndex)
@@ -176,7 +176,7 @@ class DataTable extends Component {
               confirm({
                 closeDropdown: false,
               });
-              this.setState({ searchText: selectedKeys[0] });
+              this.setState({ searchText: selectedKeys[0].toEnglishDigit() });
               this.setState({ searchedColumn: dataIndex });
             }}
           >
@@ -193,7 +193,7 @@ class DataTable extends Component {
       />
     ),
     onFilter: (value, record) =>
-      record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
+      record[dataIndex].toString().toEnglishDigit().toLowerCase().includes(value.toLowerCase()),
     onFilterDropdownVisibleChange: (visible) => {
       if (visible) {
         setTimeout(() => this.searchInput.current?.select(), 100);
@@ -289,7 +289,7 @@ class DataTable extends Component {
         align: "right",
         width : '10%',
         ...this.getColumnSearchProps("number"),
-        sorter: (a, b) => a.number - b.number,
+        sorter: (a, b) => +a.number.toEnglishDigit() - +b.number.toEnglishDigit(),
         render: (text, record, index) => {
           if (record.status === "NO") {
             return (
@@ -299,7 +299,7 @@ class DataTable extends Component {
                   this.timeout = setTimeout(() => {
                     const dataArray = this.state.data;
                     dataArray[index].number = event.target.value
-                      ? event.target.value.toString()
+                      ? event.target.value.toString().toEnglishDigit()
                       : "0";
                     this.setState({ data: dataArray });
                     console.log(this.state.data[index].number);

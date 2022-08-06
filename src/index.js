@@ -1,3 +1,4 @@
+/* eslint-disable no-extend-native */
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
@@ -24,3 +25,21 @@ String.prototype.toPersianDigit = function () {
     return id[+w];
   });
 };
+String.prototype.toEnglishDigit = function () {
+  
+  
+  const persianNumbers = [/۰/g, /۱/g, /۲/g, /۳/g, /۴/g, /۵/g, /۶/g, /۷/g, /۸/g, /۹/g]
+  const enNumbers = [/0/g, /1/g, /2/g, /3/g, /4/g, /5/g, /6/g, /7/g, /8/g, /9/g];
+  const fixNumbers = function (str)
+  {
+    if(typeof str === 'string')
+    {
+      for(var i=0; i<10; i++)
+      {
+        str = str.replace(persianNumbers[i], i).replace(enNumbers[i], i);
+      }
+    }
+    return str;
+  };
+  return fixNumbers(this);
+}
