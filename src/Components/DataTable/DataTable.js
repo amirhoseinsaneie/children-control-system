@@ -5,7 +5,17 @@ import {
   SyncOutlined,
   ReloadOutlined,
 } from "@ant-design/icons";
-import { Alert, Button, Input, Modal, Select, Space, Table, Tag } from "antd";
+import {
+  Alert,
+  Button,
+  Input,
+  Modal,
+  PageHeader,
+  Select,
+  Space,
+  Table,
+  Tag,
+} from "antd";
 import axios from "axios";
 import React, { Component } from "react";
 import Highlighter from "react-highlight-words";
@@ -106,7 +116,6 @@ class DataTable extends Component {
         },
       });
     } else {
-      
       let isUnique = true;
       for (let i = 0; i < this.state.data.length; i++) {
         const element = this.state.data[i];
@@ -124,10 +133,9 @@ class DataTable extends Component {
             title: "فرد دیگر با همین شماره وجود دارد.",
             onOk: () => {
               postData();
-              this.setState({ modal: null , loading : true });
+              this.setState({ modal: null, loading: true });
             },
             message: "آیا می‌خواهید این فرد را با شماره تکراری ثبت کنید؟",
-            
           },
         });
       }
@@ -667,6 +675,32 @@ class DataTable extends Component {
 
     return (
       <div className="DataTable">
+        <PageHeader
+          title={
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <div
+                style={{
+                  height: "1.25rem",
+                  width: "1.25rem",
+                  fill: "black",
+                  position: "relative",
+                  marginLeft: "0.5rem",
+                  bottom : '0.25rem'
+                }}
+              >
+                {this.props.icon}
+              </div>
+              {this.props.title}
+            </div>
+          }
+          extra={
+            <>
+              <Button onClick={this.fetchData} icon={<ReloadOutlined />}>
+                بروزرسانی{" "}
+              </Button>
+            </>
+          }
+        />
         <Table
           loading={this.state.loading || !this.state.fetched}
           columns={columns}
@@ -674,24 +708,18 @@ class DataTable extends Component {
           pagination={{ showTitle: false }}
           rowKey={(record) => record.id}
         />
-        <div onClick={this.fetchData} className="Reload">
-          <ReloadOutlined />
-          <span>بروزرسانی وضعیت کودکان</span>
-        </div>
-        <div onClick={this.updateKidsList} className="Refresh">
-          <ReloadOutlined />
-          <span>بروزرسانی لیست کودکان</span>
-        </div>
+
         <Modal
           visible={this.state.modal ? true : false}
-          title={this.state.modal ? this.state.modal.title : ''}
+          title={this.state.modal ? this.state.modal.title : ""}
           onOk={this.state.modal ? this.state.modal.onOk : null}
-          onCancel={()=>{this.setState({ modal: null })}}
+          onCancel={() => {
+            this.setState({ modal: null });
+          }}
           cancelText="خیر"
           okText="بله"
-          
         >
-          <p>{this.state.modal ? this.state.modal.message : ''}</p>
+          <p>{this.state.modal ? this.state.modal.message : ""}</p>
         </Modal>
         {this.state.error ? (
           <div className="error-container">
