@@ -1,17 +1,19 @@
 import { Button, Form, Input, Select } from "antd";
 import { DatePicker } from "antd-jalali";
 import { useForm } from "antd/lib/form/Form";
+import Logo from "../../Components/Logo/Logo";
 
 
 const NewKid = () => {
     const [form] = useForm();
     return <div className="form">
-        <h1>فرم ثبت نام غرفه نوباوگان مصباح الهدی</h1>
+        <Logo />
+        <h2>فرم ثبت نام غرفه نوباوگان مصباح الهدی</h2>
         <Form
             dir="rtl"
             layout="vertical"
-            form={form}>
-
+            form={form}
+            style={{width : '100%'}}>
             <Form.Item
                 label="نام کودک"
                 name="first_name"
