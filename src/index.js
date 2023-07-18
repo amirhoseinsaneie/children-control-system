@@ -5,11 +5,19 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from "react-router-dom";
+import { ConfigProvider } from 'antd';
+import { JalaliLocaleListener } from 'antd-jalali'
+import fa_IR from 'antd/es/locale/fa_IR'
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-    <App />
+      <ConfigProvider direction="rtl" locale={fa_IR}>
+        <JalaliLocaleListener />
+
+        <App />
+      </ConfigProvider>
     </BrowserRouter>
   </React.StrictMode>
 );
@@ -26,16 +34,13 @@ String.prototype.toPersianDigit = function () {
   });
 };
 String.prototype.toEnglishDigit = function () {
-  
-  
+
+
   const persianNumbers = [/۰/g, /۱/g, /۲/g, /۳/g, /۴/g, /۵/g, /۶/g, /۷/g, /۸/g, /۹/g]
   const enNumbers = [/0/g, /1/g, /2/g, /3/g, /4/g, /5/g, /6/g, /7/g, /8/g, /9/g];
-  const fixNumbers = function (str)
-  {
-    if(typeof str === 'string')
-    {
-      for(var i=0; i<10; i++)
-      {
+  const fixNumbers = function (str) {
+    if (typeof str === 'string') {
+      for (var i = 0; i < 10; i++) {
         str = str.replace(persianNumbers[i], i).replace(enNumbers[i], i);
       }
     }
