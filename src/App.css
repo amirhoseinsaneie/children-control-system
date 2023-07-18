@@ -33,3 +33,11 @@
   margin-top: 0.75rem;
   transform: scale(1.25);
 }
+.form {
+  background-color: white;
+  padding: 1rem;
+  border-radius: 6px;
+  max-width: 45rem;
+  margin: auto;
+  
+}
