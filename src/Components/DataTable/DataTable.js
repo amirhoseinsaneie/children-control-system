@@ -20,7 +20,7 @@ import axios from "axios";
 import React, { Component } from "react";
 import Highlighter from "react-highlight-words";
 import "./DataTable.css";
-const URL = "https://bracketacademy.ir/api/api2";
+const URL = "https://mesbahkids.ir/api2";
 class DataTable extends Component {
   constructor(props) {
     super(props);

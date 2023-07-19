@@ -7,11 +7,12 @@ import { useEffect, useState } from "react";
 
 const NewKid = () => {
   const [loading, setLoading] = useState(false);
-  const URL = "https://bracketacademy.ir/api/api2";
+  const URL = "https://mesbahkids.ir/api2";
 
   const addNewKid = (values) => {
     setLoading(true);
-    const birth_date = new Date(values.birth_date).toISOString()
+    const birth_date = new Date(values.birth_date).toISOString().substring(0, 10)
+    console.log(birth_date)
     axios
       .post(URL + "/kids" , {...values , birth_date})
       .then((res) => {
