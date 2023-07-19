@@ -1,0 +1,40 @@
+{
+  "files": {
+    "main.css": "/static/css/main.cf3c3fc7.css",
+    "main.js": "/static/js/main.0d1ceeea.js",
+    "static/js/787.d6468efa.chunk.js": "/static/js/787.d6468efa.chunk.js",
+    "static/media/IRANSansWeb_Light.ttf": "/static/media/IRANSansWeb_Light.2b64937900326fc69f94.ttf",
+    "static/media/IRANSansWeb.ttf": "/static/media/IRANSansWeb.30ee3c0863897d81f92c.ttf",
+    "static/media/IRANSansWeb_UltraLight.eot": "/static/media/IRANSansWeb_UltraLight.fd1af53a23ceca23f517.eot",
+    "static/media/IRANSansWeb_UltraLight.ttf": "/static/media/IRANSansWeb_UltraLight.376f003b8df7cfc4ce5e.ttf",
+    "static/media/IRANSansWeb_Light.eot": "/static/media/IRANSansWeb_Light.a0ee0ae6e0129ac7f74d.eot",
+    "static/media/IRANSansWeb.eot": "/static/media/IRANSansWeb.467890291ebc844f8ba1.eot",
+    "static/media/IRANSansWeb_Bold.eot": "/static/media/IRANSansWeb_Bold.8d7e653ce5bc1e62abdc.eot",
+    "static/media/IRANSansWeb_Bold.ttf": "/static/media/IRANSansWeb_Bold.eb38333f6b96ff1dc30a.ttf",
+    "static/media/IRANSansWeb_Black.eot": "/static/media/IRANSansWeb_Black.a118d87edfd55b5e1ca7.eot",
+    "static/media/IRANSansWeb_Black.ttf": "/static/media/IRANSansWeb_Black.57ad6d6688af34f8ae91.ttf",
+    "static/media/IRANSansWeb_Medium.ttf": "/static/media/IRANSansWeb_Medium.e96320d7828b1c1aeb64.ttf",
+    "static/media/IRANSansWeb_Medium.eot": "/static/media/IRANSansWeb_Medium.0fcf8466cb60fab65357.eot",
+    "static/media/IRANSansWeb.woff": "/static/media/IRANSansWeb.68370f6349ac364224f8.woff",
+    "static/media/IRANSansWeb_Light.woff": "/static/media/IRANSansWeb_Light.c155096a5b1dc2a8557b.woff",
+    "static/media/IRANSansWeb_UltraLight.woff": "/static/media/IRANSansWeb_UltraLight.79de6dcdbcc967914a4c.woff",
+    "static/media/IRANSansWeb_Bold.woff": "/static/media/IRANSansWeb_Bold.8752a13067e8cefedc56.woff",
+    "static/media/IRANSansWeb_Black.woff": "/static/media/IRANSansWeb_Black.00494ffe4017a942f9fa.woff",
+    "static/media/IRANSansWeb_Medium.woff": "/static/media/IRANSansWeb_Medium.71356635cec7b9d93321.woff",
+    "static/media/IRANSansWeb.woff2": "/static/media/IRANSansWeb.2a45c80a2577c4a17c18.woff2",
+    "static/media/IRANSansWeb_Light.woff2": "/static/media/IRANSansWeb_Light.8de85339f177b3d56196.woff2",
+    "static/media/IRANSansWeb_UltraLight.woff2": "/static/media/IRANSansWeb_UltraLight.f26fa33e23eaf3d33a2c.woff2",
+    "static/media/IRANSansWeb_Bold.woff2": "/static/media/IRANSansWeb_Bold.6b3b0d526a10d800c5d9.woff2",
+    "static/media/IRANSansWeb_Medium.woff2": "/static/media/IRANSansWeb_Medium.9e907f86bb457f998e5d.woff2",
+    "static/media/IRANSansWeb_Black.woff2": "/static/media/IRANSansWeb_Black.5675118f6d08ebc3f1a7.woff2",
+    "static/media/logo.png": "/static/media/logo.c9a324ea88b6430dd7ce.png",
+    "index.html": "/index.html",
+    "main.cf3c3fc7.css.map": "/static/css/main.cf3c3fc7.css.map",
+    "main.0d1ceeea.js.map": "/static/js/main.0d1ceeea.js.map",
+    "787.d6468efa.chunk.js.map": "/static/js/787.d6468efa.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.cf3c3fc7.css",
+    "static/js/main.0d1ceeea.js"
+  ]
+}
