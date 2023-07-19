@@ -11,8 +11,9 @@ const NewKid = () => {
 
   const addNewKid = (values) => {
     setLoading(true);
+    const birth_date = new Date(values.birth_date).toISOString()
     axios
-      .get(URL + "/kids")
+      .post(URL + "/kids" , {...values , birth_date})
       .then((res) => {
         Modal.success({ title: "ثبت نام با موفقیت انجام شد." });
         setLoading(false);
@@ -60,7 +61,7 @@ const NewKid = () => {
         </Form.Item>
         <Form.Item
           label="تاريخ تولد کودک"
-          name="date_of_birth"
+          name="birth_date"
           rules={[
             {
               required: true,

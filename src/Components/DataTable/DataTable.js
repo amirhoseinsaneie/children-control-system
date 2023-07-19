@@ -682,7 +682,6 @@ class DataTable extends Component {
                 style={{
                   height: "1.25rem",
                   width: "1.25rem",
-                  fill: "black",
                   position: "relative",
                   marginLeft: "0.5rem",
                   bottom : '0.25rem'
