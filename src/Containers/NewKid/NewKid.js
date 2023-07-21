@@ -29,7 +29,7 @@ const NewKid = () => {
   return (
     <div className="form">
       <Logo />
-      <h2>فرم ثبت نام غرفه نوباوگان مصباح الهدی</h2>
+      <h2>فرم ثبت نام غرفه نوباوگان هیئت مصباح الهدی</h2>
       <Form 
       onFinish={(values)=>{
         addNewKid(values)
