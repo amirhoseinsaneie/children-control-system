@@ -20,6 +20,7 @@ import axios from "axios";
 import React, { Component } from "react";
 import Highlighter from "react-highlight-words";
 import "./DataTable.css";
+import moment from "moment";
 const URL = "https://mesbahkids.ir/api2";
 class DataTable extends Component {
   constructor(props) {
@@ -54,6 +55,7 @@ class DataTable extends Component {
         this.setState({ loading: false });
         if (JSON.stringify(this.state.data) !== JSON.stringify(res.data)) {
           this.setState({ data: res.data, fetched: true });
+
         }
       })
       .catch((err) => {
@@ -211,16 +213,20 @@ class DataTable extends Component {
           <Button
             type="primary"
             onClick={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
-            icon={<SearchOutlined style={{ margin: "0px 5px" }} />}
+            icon={<SearchOutlined />}
             size="small"
             style={{
               width: 90,
+
             }}
           >
             جستوجو
           </Button>
           <Button
-            onClick={() => clearFilters && this.handleReset(clearFilters)}
+            onClick={() => {
+              clearFilters && this.handleReset(clearFilters)
+              this.handleSearch('', confirm, dataIndex)
+            }}
             size="small"
             style={{
               width: 90,
@@ -280,27 +286,20 @@ class DataTable extends Component {
   render() {
     const columns = [
       {
-        title: "نام",
-        dataIndex: "first_name",
-        key: "first_name",
+        title: "نام و نام‌خانوادگی",
+        dataIndex: "name",
+        key: "name",
         align: "right",
-        width: "7%",
-        ...this.getColumnSearchProps("first_name"),
+        width: "10%",
+        ...this.getColumnSearchProps("name"),
       },
-      {
-        title: "نام خانوادگی",
-        dataIndex: "last_name",
-        key: "last_name",
-        align: "right",
-        width: "9%",
-        ...this.getColumnSearchProps("last_name"),
-      },
+
       {
         title: "جنسیت",
         dataIndex: "gender",
         key: "gender",
         align: "right",
-        width: "8%",
+        width: "6%",
         filters: [
           {
             text: "دختر",
@@ -354,7 +353,7 @@ class DataTable extends Component {
         title: "شماره",
         dataIndex: "number",
         align: "right",
-        width: "8%",
+        width: "6%",
         ...this.getColumnSearchProps("number"),
         sorter: (a, b) =>
           +a.number.toEnglishDigit() - +b.number.toEnglishDigit(),
@@ -383,10 +382,27 @@ class DataTable extends Component {
         },
       },
       {
+        title: "سن",
+        dataIndex: "age",
+        key: "age",
+        align: "center",
+        width: "5%",
+        ...this.getColumnSearchProps("age"),
+        sorter: (a, b) =>
+          +a.age - +b.age,
+        render: (text, record, index) => {
+          // var years = moment().diff(text, 'years');
+          return (
+            <span>{text}</span>
+          )
+        },
+      },
+
+      {
         title: "WC",
         dataIndex: "wc",
         key: "wc",
-        align: "right",
+        align: "center",
         width: "5%",
         filters: [
           {
@@ -408,13 +424,17 @@ class DataTable extends Component {
         title: "نسبت تحویل دهنده",
         dataIndex: "caretaker",
         key: "caretaker",
-        align: "right",
+        align: "center",
+        width: "6%",
+
       },
       {
         title: "نام تحویل دهنده",
         dataIndex: "caretaker_name",
         key: "caretaker_name",
         align: "right",
+        width: "8%",
+
         ...this.getColumnSearchProps("caretaker_name"),
       },
       {
@@ -450,6 +470,7 @@ class DataTable extends Component {
         dataIndex: "caretaker_home_number",
         key: "caretaker_home_number",
         align: "right",
+        width: "6%",
 
         render: (text, record) =>
           text === "ندارد" ? (
@@ -531,7 +552,7 @@ class DataTable extends Component {
         dataIndex: "status",
         key: "status",
         align: "right",
-        width: "8%",
+
         filters: [
           {
             text: "ورود",
@@ -684,7 +705,7 @@ class DataTable extends Component {
                   width: "1.25rem",
                   position: "relative",
                   marginLeft: "0.5rem",
-                  bottom : '0.25rem'
+                  bottom: '0.25rem'
                 }}
               >
                 {this.props.icon}

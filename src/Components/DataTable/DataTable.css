@@ -5,7 +5,7 @@
     direction: ltr;
     width: 100%;
     padding: 0.25rem;
-    text-align: center;
+    text-align: center !important;
     margin: 0;
 }
 .ant-dropdown-menu-title-content {
