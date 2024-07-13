@@ -1,12 +1,13 @@
-FROM node:20-alpine as builder
+# Stage 1: Build the React app
+FROM node:20-alpine AS build
 WORKDIR /app
-COPY package.json .
+COPY package.json ./
+COPY package-lock.json ./
 RUN npm install --force
-COPY . .
+COPY . ./
 RUN npm run build
 
-FROM nginx:1.25
-WORKDIR /usr/share/nginx/html
-RUN rm -rf ./*
-COPY --from=builder /app/build .
-COPY ./conf1.conf /etc/nginx/conf.d/conf1.conf
+# Stage 2: Serve the app with Nginx
+FROM nginx:1.27-alpine
+COPY --from=build /app/build /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/conf.d/default.conf
