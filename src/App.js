@@ -38,7 +38,7 @@ function App() {
   return (
     <Routes>
       <Route path="/signUp" element={
-        <div style={{ padding: '1rem', backgroundColor: 'whitesmoke' }}><NewKid /></div>
+        <div style={{ padding: '1rem', backgroundColor: '#0A2139' }}><NewKid /></div>
       } caseSensitive={false} />
       <Route caseSensitive={false} path="*" element={
         <Layout>
@@ -48,7 +48,7 @@ function App() {
             collapsed={collapsed}
             onCollapse={() => { setCollapsed(!collapsed) }}
           >
-            <div className="logo"><Logo white /> </div>
+            <div className="logo" style={{marginTop : '-16px' , marginRight : '-8px'}}><Logo /> </div>
             <Menu
               theme="dark"
               mode="inline"
@@ -93,7 +93,7 @@ function App() {
             <Content
               className="site-layout-background"
               style={{
-                padding: "1rem",
+                padding: location.pathname === '/NewKid' ? '0' : "1rem",
                 minHeight: "100vh",
               }}
             >
@@ -104,7 +104,7 @@ function App() {
                   element={<WomenPanel />}
                   caseSensitive={false}
                 />
-                <Route path="/NewKid" element={<NewKid />} caseSensitive={false} />
+                <Route path="/NewKid" element={<div style={{ padding: '1rem', backgroundColor: '#0A2139' }}><NewKid /></div>} caseSensitive={false} />
                 <Route path="*"
                   element={
                     <Result

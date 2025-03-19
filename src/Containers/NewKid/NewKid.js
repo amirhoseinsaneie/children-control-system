@@ -3,7 +3,7 @@ import { DatePicker } from "antd-jalali";
 import { useForm } from "antd/lib/form/Form";
 import Logo from "../../Components/Logo/Logo";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 
 const NewKid = () => {
   const [loading, setLoading] = useState(false);
@@ -29,11 +29,12 @@ const NewKid = () => {
   return (
     <div className="form">
       <Logo />
-      <h2>فرم ثبت نام غرفه نوباوگان هیئت مصباح الهدی</h2>
+      <h2>فرم ثبت نام غرفه کودک جوانه‌ها</h2>
       <Form 
       onFinish={(values)=>{
         addNewKid(values)
       }}
+      scrollToFirstError={true}
       layout="vertical" 
       form={form} style={{ width: "100%" }}>
         <Form.Item
@@ -82,7 +83,7 @@ const NewKid = () => {
             },
           ]}
         >
-          <Select placeholder="انتخاب کنید">
+          <Select placeholder="انتخاب کنید" dropdownClassName="form-select">
             <Select.Option value="FE"> دختر</Select.Option>
             <Select.Option value="MA">پسر</Select.Option>
           </Select>
@@ -145,17 +146,18 @@ const NewKid = () => {
             },
           ]}
         >
-          <Select placeholder="انتخاب کنید">
+          <Select placeholder="انتخاب کنید" dropdownClassName="form-select">
             <Select.Option value={true}> بله</Select.Option>
             <Select.Option value={false}>خیر</Select.Option>
           </Select>
         </Form.Item>
-        <Form.Item>
+        <Form.Item className="submit-button-container">
           <Button
             loading={loading}
             style={{ width: "100%" }}
             type="primary"
             htmlType="submit"
+            className="submit-button"
           >
             ثبت نام
           </Button>

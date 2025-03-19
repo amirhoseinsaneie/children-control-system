@@ -35,12 +35,79 @@
   transform: scale(1.25);
 }
 .form {
-  background-color: white;
+  background-color: #122649;
+  color: white;
   padding: 1rem;
+  padding-top: 0;
   border-radius: 6px;
   max-width: 45rem;
   margin: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.form label , .form h2 {
+  color: white !important;
+}
+.form input , .form .ant-picker , .form .ant-select-selector , .ant-picker-panel  {
+  background-color: #0A2139 !important;
+  color: white !important;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 5px;
+}
+.ant-picker-panel * {
+  color: white !important;
+}
+.ant-picker-cell-selected .ant-picker-cell-inner{
+  background-color: #FFC541 !important;
+  color: #0A2139 !important;
+}
+.ant-picker-cell:hover .ant-picker-cell-inner{
+  background-color: #ffc64133 !important;
+  color: #FFC541 !important;
+}
+.ant-picker-header , .ant-picker-footer {
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+.form .ant-select-selector {
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 5px !important;
+
+}
+.form .submit-button{
+ color: #0A2139;
+ background-color: #FFC541;
+ border: 1px solid #FFC541;
+ border-radius: 5px;
+
+}
+.form .submit-button:hover {
+ background-color: #cc9e34;
+ border: 1px solid #FFC541;
+
+}
+
+.form .submit-button-container {
+
+  background-color: #122649;
+  margin-bottom: 0;
+  width: 100%;
+  padding: 1rem 0;
+}
+.form svg {
+  color: white;
+  background-color: #122649;
+  outline: none;
+}
+.form-select ,.form-select .ant-select-item{
+  background-color: #122649 !important;
+  color: white !important;
+
+}
+.form-select .ant-select-item-option-selected{
+  background-color: #0A2139 !important;
+
 }

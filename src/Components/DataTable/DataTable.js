@@ -20,7 +20,6 @@ import axios from "axios";
 import React, { Component } from "react";
 import Highlighter from "react-highlight-words";
 import "./DataTable.css";
-import moment from "moment";
 const URL = "https://api.javaaneha.ir/api2";
 class DataTable extends Component {
   constructor(props) {

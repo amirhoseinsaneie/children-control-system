@@ -1,4 +1,4 @@
-import logo from "./logo.png";
+import logo from "./Logo.svg";
 const Logo = ({white}) => {
   return (
     <img
@@ -6,7 +6,7 @@ const Logo = ({white}) => {
       alt="logo"
       width='100%'
       
-      style={{ filter: white ? 'none': "invert(1)", margin: "auto" , maxWidth : '7.5rem' }}
+      style={{ filter: !white ? 'none': "invert(1)", margin: "auto" , maxWidth : '15em' }}
     />
   );
 };
