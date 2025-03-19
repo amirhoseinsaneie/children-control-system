@@ -286,14 +286,21 @@ class DataTable extends Component {
   render() {
     const columns = [
       {
-        title: "نام و نام‌خانوادگی",
-        dataIndex: "name",
-        key: "name",
+        title: "نام",
+        dataIndex: "first_name",
+        key: "first_name",
         align: "right",
         width: "10%",
-        ...this.getColumnSearchProps("name"),
+        ...this.getColumnSearchProps("first_name"),
       },
-
+      {
+        title: "نام‌خانوادگی",
+        dataIndex: "last_name",
+        key: "last_name",
+        align: "right",
+        width: "10%",
+        ...this.getColumnSearchProps("last_name"),
+      },
       {
         title: "جنسیت",
         dataIndex: "gender",
