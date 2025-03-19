@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 
 const NewKid = () => {
   const [loading, setLoading] = useState(false);
-  const URL = "https://mesbahkids.ir/api2";
+  const URL = "https://api.javaaneha.ir/api2";
 
   const addNewKid = (values) => {
     setLoading(true);
