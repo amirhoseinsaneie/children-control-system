@@ -334,28 +334,26 @@ class DataTable extends Component {
         sorter: (a, b) => a.gender.localeCompare(b.gender),
 
         render: (text, record, index) => {
-          if (record.status !== "NO") {
-            if (text === "MA") {
+          const gender = record.gender;
+          if (record.status !== 'NO') {
+            if (gender === "MA") {
               return <Tag color="geekblue">پسر</Tag>;
-            } else if (text === "FE") {
+            } else if (gender === "FE") {
               return <Tag color="magenta">دختر</Tag>;
             }
-          } else {
+          }
+          else {
             return (
               <Select
                 style={{
                   width: "100%",
                 }}
-                value={
-                  this.state.data[index].gender === "NO"
-                    ? ""
-                    : this.state.data[index].gender
-                }
+                defaultValue={gender === "NO" ? "" : gender}
+                value={gender === "NO" ? "" : gender}
                 onChange={(value) => {
                   const dataArray = this.state.data;
                   dataArray[index].gender = value ? value.toString() : "";
                   this.setState({ data: dataArray });
-                  console.log(this.state.data[index].gender);
                 }}
               >
                 <Select.Option value="FE">دختر</Select.Option>
@@ -777,4 +775,4 @@ class DataTable extends Component {
   }
 }
 
-export default React.memo(DataTable);
+export default DataTable;

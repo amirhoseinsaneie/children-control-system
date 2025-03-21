@@ -14,7 +14,7 @@ const NewKid = () => {
     const birth_date = new Date(values.birth_date).toISOString().substring(0, 10)
     console.log(birth_date)
     axios
-      .post(URL + "/kids" , {...values , birth_date})
+      .post(URL + "/addkid" , {...values , birth_date})
       .then((res) => {
         Modal.success({ title: "ثبت نام با موفقیت انجام شد." });
         setLoading(false);

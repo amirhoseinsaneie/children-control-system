@@ -97,7 +97,7 @@
   width: 100%;
   padding: 1rem 0;
 }
-.form svg {
+.form .anticon:not(.anticon-loading) svg {
   color: white;
   background-color: #122649;
   outline: none;

@@ -58,7 +58,7 @@ function App() {
                 collapsed={collapsed}
                 onCollapse={() => { setCollapsed(!collapsed) }}
               >
-                <div className="logo" style={{ marginTop: '-16px', marginRight: '-8px' }}><Logo /> </div>
+                <div className="logo" style={{ marginTop: '-16px', marginRight: '0px' }}><Logo /> </div>
                 <Menu
                   theme="dark"
                   mode="inline"
