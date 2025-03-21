@@ -93,13 +93,15 @@ class DataTable extends Component {
       });
   };
   entryHandler = (record, index) => {
+    const payLoad = {
+      id: record.id,
+      number: this.state.data[index].number,
+      gender: record.gender && record.gender !== 'NO' ? record.gender : this.state.data[index].gender,
+    };
+
     const postData = () => {
       axios
-        .post(URL + this.props.entryURL, {
-          id: record.id,
-          number: this.state.data[index].number,
-          gender: this.state.data[index].gender,
-        })
+        .post(URL + this.props.entryURL, payLoad)
         .then((res) => {
           const dataArray = this.state.data;
           dataArray[index].status = "IN";
