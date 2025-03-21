@@ -743,6 +743,7 @@ class DataTable extends Component {
           dataSource={this.state.data}
           pagination={{ showTitle: false }}
           rowKey={(record) => record.id}
+          scroll={{ x: true }} // enables horizontal scrolling when table width exceeds window width
         />
 
         <Modal
