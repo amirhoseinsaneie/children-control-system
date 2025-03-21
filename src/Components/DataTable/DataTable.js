@@ -21,6 +21,16 @@ import React, { Component } from "react";
 import Highlighter from "react-highlight-words";
 import "./DataTable.css";
 const URL = "https://api.javaaneha.ir/api2";
+
+// Add axios interceptor to attach auth token to every request.
+axios.interceptors.request.use((config) => {
+  const token = localStorage.getItem("authToken");
+  if (token) {
+    config.headers.Authorization = `Token ${token}`;
+  }
+  return config;
+});
+
 class DataTable extends Component {
   constructor(props) {
     super(props);

@@ -8,6 +8,7 @@ import { BrowserRouter } from "react-router-dom";
 import { ConfigProvider } from 'antd';
 import { JalaliLocaleListener } from 'antd-jalali'
 import fa_IR from 'antd/es/locale/fa_IR'
+import { AuthProvider } from './providers/auth';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -15,8 +16,9 @@ root.render(
     <BrowserRouter>
       <ConfigProvider direction="rtl" locale={fa_IR}>
         <JalaliLocaleListener />
-
-        <App />
+        <AuthProvider>
+          <App />
+        </AuthProvider>
       </ConfigProvider>
     </BrowserRouter>
   </React.StrictMode>
