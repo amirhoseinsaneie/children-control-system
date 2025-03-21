@@ -335,23 +335,21 @@ class DataTable extends Component {
 
         render: (text, record, index) => {
           const gender = record.gender;
-          if (record.status !== 'NO') {
-            if (gender === "MA") {
-              return <Tag color="geekblue">پسر</Tag>;
-            } else if (gender === "FE") {
-              return <Tag color="magenta">دختر</Tag>;
-            }
+          const dataArray = this.state.data;
+          if (gender === "MA") {
+            return <Tag color="geekblue">پسر</Tag>;
+          } else if (gender === "FE") {
+            return <Tag color="magenta">دختر</Tag>;
           }
+
           else {
             return (
               <Select
                 style={{
                   width: "100%",
                 }}
-                defaultValue={gender === "NO" ? "" : gender}
-                value={gender === "NO" ? "" : gender}
+                value={dataArray[index].gender === "NO" ? "" : dataArray[index].gender}
                 onChange={(value) => {
-                  const dataArray = this.state.data;
                   dataArray[index].gender = value ? value.toString() : "";
                   this.setState({ data: dataArray });
                 }}
